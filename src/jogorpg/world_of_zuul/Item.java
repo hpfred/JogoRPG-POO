@@ -16,7 +16,7 @@ public class Item {
     private String NomeDoItem;
     private int PesoDoItem;
     private int atributo;
-    private String tipoIP;     //C = consumivel A = ataque D = defesa B = Buffer M = moeda
+    private String tipoIP;     //C = consumivel A = ataque D = defesa E = energia P = peso M = moeda 
     
     public Item(String NomeDoItem, int PesoDoItem, int atributo, String tipoIP) {
         this.NomeDoItem = NomeDoItem;
@@ -38,7 +38,10 @@ public class Item {
     }  
 
     public int getAtributo() {
+        if(atributo != 0)
         return atributo;
+        
+        else return 0;
     }
 
     public String getTipoIP() {

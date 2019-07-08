@@ -14,16 +14,9 @@ package jogorpg.world_of_zuul;
 
 public class Vilao extends Personagem{
     
-    private int qtdMoedas;
-
-    public Vilao(String Nome, int Energia,int qtdMoedas) {
-        super(Nome, Energia);
-        this.qtdMoedas = qtdMoedas;
-    }
-
-    public int getQtdMoedas() {
-        return qtdMoedas;
-    }
     
+    public Vilao(String Nome, int Energia, char tipo) {
+        super(Nome, Energia, tipo);
+    }
     
 }

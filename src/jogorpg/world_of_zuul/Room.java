@@ -3,6 +3,7 @@ package jogorpg.world_of_zuul;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Class Room - a room in an adventure game.
@@ -15,7 +16,7 @@ import java.util.Iterator;
  * stores a reference to the neighboring room.
  * 
  * @author  Frederico Peixoto Antunes e José Pauletti
- * @version 2019.07.07
+ * @version 2019.07.05
  */
 
 public class Room 
@@ -66,7 +67,7 @@ public class Room
      */
     public String getLongDescription()
     {   
-        return "\n------------\nYou are " + description + ".\n" + getExitString() + "\n" + getListaPersonagens() + "\n" + getListaItens();
+        return "\n------------\n" + description + ".\n" + getExitString() + "\n" + getListaPersonagens() + "\n" + getListaItens();
     }
 
     /**
@@ -143,79 +144,29 @@ public class Room
         itens.put(nome, item);
     }
     
-    public Item getItem(String nome){
-        return itens.get(nome);
-    }
-    
     public void removeItem(String nome){
         itens.remove(nome);
     }
 
-//*    
-    public void battle(Heroi hero, String enemy1){
-        Item aux;
-        Item auxI;
-        int auxDano = 0;
-        Personagem enemy = personagens.get(enemy1);
-        
-        //Vitoria Heroi
-        if(hero.sorte() > enemy.sorte()){
-            hero.incremento(1);
-            if(enemy.getDefesa() != null){
-                aux = hero.getAtaque();
-                auxI = enemy.getDefesa();
-                
-                auxDano = aux.getAtributo() - auxI.getAtributo();
-                enemy.decremento(auxDano);
-         
-            }
-               
-           }
-        
-        //Vitoria inimiga
-        if(hero.sorte() < enemy.sorte()){
-            if(hero.getDefesa() != null){
-               aux = hero.getDefesa();
-               auxI = enemy.getAtaque();
-               
-               auxDano = auxI.getAtributo() - aux.getAtributo();
-               hero.decremento(auxDano);
-           }
-           enemy.incremento(1);
-        }
-        
-        // Empate na Sorte
-        if(hero.sorte() == enemy.sorte()){
-            if(hero.getDefesa() != null){
-                aux = hero.getDefesa();
-                auxI = enemy.getAtaque();
-               
-                auxDano = auxI.getAtributo() - aux.getAtributo();
-                
-                hero.decremento(auxDano);
-            } 
-            else{
-                auxI = enemy.getAtaque();
-               
-                hero.decremento(auxI.getAtributo()); 
-            }
-           
-            if(enemy.getDefesa() != null){  
-                aux = hero.getAtaque();
-                auxI = enemy.getDefesa();
-                
-                auxDano = aux.getAtributo() - auxI.getAtributo();
-                
-                enemy.decremento(auxDano);
-         
-        }
-        else{
-                aux = hero.getAtaque();
-                enemy.decremento(aux.getAtributo());
-           }
-        }
-    }
-//*/
+    public Personagem getPesonagem(String nome){
     
+       return personagens.get(nome);
+        
+    }
+
+    public Item getItens(String nome) {
+        
+        return itens.get(nome);
+        
+    }
+    
+  public void imprimirBau(){
+  
+          for(HashMap.Entry<String, Item> i: itens.entrySet()){
+            System.out.println(i.getKey());
+            }  
+  
+  }
+
 }
 

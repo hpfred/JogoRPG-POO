@@ -5,171 +5,318 @@
  * ...
  * ...
  * 
- * @author  Frederico Peixoto Antunes e José Pauletti
- * @version 2019.07.07
+ * @author  Ari e José Pauletti
+ * @version 2019.06.30
  */
 
 package jogorpg.world_of_zuul;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
 public class Heroi extends Personagem {
-    private int limiteDePeso;
-    private int pesoAtual;
-    private int qntdItens;
+    
+    private int LimitedePeso;
+    private int PesoAtual;
+    private int QntdItens;
     private int moedas;
+    private int EnerMax;
     
-    private Map<String, Item> inventario; 
+    private Map<String, Item> Inventario = new HashMap<String, Item>(); 
             
-    public Heroi(String nome, int energia) {
-        super(nome, energia);
+    public Heroi(String Nome, int Energia, char tipo) {
+        super(Nome, Energia, tipo);
     }
+
+    public Item getMoedas(){
+        
+        return Inventario.get("MOEDAS");
+        
+    }
+    public void ImprimirInventario(){
     
-    public void alimentar(String comida){            // Passar como parametro um int de quanto incrementar; Facilitaria para comida/poção;
-        Item aux = null;
-        if(inventario.get(comida)!= null){
-            aux = inventario.get(comida);
+        for(Map.Entry<String, Item> i: Inventario.entrySet()){
+            System.out.println(i.getKey());
+        }
     
-        incremento(aux.getAtributo());
+    }
+    public void Alimentar(String comida){            // Passar como parametro um int de quanto incrementar; Facilitaria para comida/poção;
+       Item aux = null;
+        if(Inventario.get(comida)!= null){
+        aux = Inventario.get(comida);
+    
+       Incremento(aux.getAtributo());
     }
         System.out.println("Item inexistente");
     }
     
-    public void lutar(Personagem inimigo){            // Método de luta deveria mesmo ser dentro da classe Heroi?
-        Item aux;
-        Item auxI;
+    public void Lutar(Personagem Inimigo){            // Método de luta deveria mesmo ser dentro da classe Heroi?
+        Item aux = null;
+        Item auxI = null;
+        
+        int sorte_heroi = 0;
+        int sorte_vilao = 0;
         
         int auxDano = 0;
+//Vitoria Heroi
+        sorte_heroi = Sorte();
+        sorte_vilao = Inimigo.Sorte();
         
-        //Vitoria Heroi
-        if(sorte() > inimigo.sorte()){
-            incremento(1);
-            if(inimigo.getDefesa() != null){
+        if(sorte_heroi > sorte_vilao){
+            System.out.println("Heroi");
+            Incremento(1);
+            
                 aux = getAtaque();
-                auxI = inimigo.getDefesa();
+                auxI = Inimigo.getDefesa();
+                
+            if(Inimigo.getDefesa() != null){
                 
                 auxDano = aux.getAtributo() - auxI.getAtributo();
                 
-                inimigo.decremento(auxDano);
-            }       
+                Inimigo.Decremento(auxDano);
+         
+            }else if(aux == null){
+               Inimigo.Decremento(1);
+           }else
+                Inimigo.Decremento(aux.getAtributo());
         }
         
         //Vitoria inimiga
-        if(sorte() < inimigo.sorte()){
-            if(getDefesa() != null){
-                aux = getDefesa();
-                auxI = inimigo.getAtaque();
+        
+        if(sorte_heroi < sorte_vilao){
+            System.out.println("Inimigo");
+            
+               aux = getDefesa();
+               auxI = Inimigo.getAtaque();
                
-                auxDano = auxI.getAtributo() - aux.getAtributo();
+            if(aux !=  null){
+           
+               int j = aux.getAtributo();
+               int k;
+               if(auxI == null)
+                k = 1;
+               else k = auxI.getAtributo();
                
-                decremento(auxDano);
-            }
-            inimigo.incremento(1);
+               if(j > k)
+                   auxDano = j-k;
+               else auxDano = k - j;
+               
+               Decremento(auxDano);
+           }else if(auxI != null){
+            Decremento(auxI.getAtributo());
+            }else {
+               Decremento(1);
+           }
+           
+            Inimigo.Incremento(1);
         }
         
         // Empate na Sorte
-        if(sorte() == inimigo.sorte()){
+        
+        if(sorte_heroi == sorte_vilao){
+            
+            System.out.println("Empate");
+           
             if(getDefesa() != null){
            
-                aux = getDefesa();
-                auxI = inimigo.getAtaque();
+               aux = getDefesa();
+               auxI = Inimigo.getAtaque();
                
-                auxDano = auxI.getAtributo() - aux.getAtributo();
-                
-                decremento(auxDano);
-            } 
-            else{
-                auxI = inimigo.getAtaque();
+               int j = aux.getAtributo();
+               int k;
+               if(auxI == null)
+                k = 1;
+               else k = auxI.getAtributo();
                
-                decremento(auxI.getAtributo()); 
+               if(j > k)
+                   auxDano = j-k;
+               else auxDano = k - j;
+               
+               
+               Decremento(auxDano);
+           } else{
+                if(Inimigo.getAtaque() != null){
+               auxI = Inimigo.getAtaque();
+               
+               Decremento(auxI.getAtributo()); 
+                       }else Decremento(1);
             }
            
-            if(inimigo.getDefesa() != null){
+           
+           if(Inimigo.getDefesa() != null){
+                
                 aux = getAtaque();
-                auxI = inimigo.getDefesa();
+                auxI = Inimigo.getDefesa();
                 
                 auxDano = aux.getAtributo() - auxI.getAtributo();
                 
-                inimigo.decremento(auxDano);
+                Inimigo.Decremento(auxDano);
+         
             }
+//            else{   
+//                aux = getAtaque();
+//                Inimigo.Decremento(aux.getAtributo());
+//            }
+            //
             else{
-                aux = getAtaque();
-                inimigo.decremento(aux.getAtributo());
-           }
-        }
+                if(getAtaque()!= null){
+                    aux = getAtaque();
+                    Inimigo.Decremento(aux.getAtributo());
+                }else Inimigo.Decremento(1);
+            }
+           //
+        } 
     }
    
-    public void inserirItem(Item item){   // Modificar para tipo Boolean para poder retornar se 
-        if(pesoAtual < limiteDePeso){
-            inventario.put(item.getNomeDoItem(), item);
-            pesoAtual = pesoAtual + item.getPesoDoItem();
-            qntdItens++;
-        }
+    public void InserirItem(Item item){   // Modificar para tipo Boolean para poder retornar se 
+        
+        if(LimitedePeso == 0) LimitedePeso = 9;
+        
+        if(PesoAtual < LimitedePeso){
+            if(item.getNomeDoItem() != "MOEDAS"){
+            Inventario.put(item.getNomeDoItem(), item);
+            PesoAtual = PesoAtual + item.getPesoDoItem();
+            QntdItens++;
+                System.out.println(item.getNomeDoItem() + " adicionado no inventario");
+            }else if(item.getNomeDoItem().equals("MOEDAS")){
+                    adionarMoedas(item.getAtributo());
+                    System.out.println("Moedas Adicionadas no iinventario");
+            }
         else    
             System.out.println("Inventário cheio!");
+          
+    }
     }
     
-    public void remover(String nome){           // Modifiquei/Modificar nome do método de "Remover" para "RemoverItem"; Tbm modificar para tipo Item para pdoer retornar
-        if(inventario.get(nome) != null){
-            inventario.remove(nome);
-            qntdItens--;
+    public void Remover(String nome){           // Modifiquei/Modificar nome do método de "Remover" para "RemoverItem"; Tbm modificar para tipo Item para pdoer retornar
+     
+        if(Inventario.get(nome) != null){
+        
+            Inventario.remove(nome);
+            QntdItens--;
             System.out.println("Item removido");
         }
-        else 
-            System.out.println("Item não existe no seu inventário");
+        else System.out.println("Item não existe no seu inventário");
+            
     }
  
     public void equiparItem(String eqp){
+        
         Item aux = null;
         
-        aux = inventario.get(eqp);
+        aux = Inventario.get(eqp);
         
         if(aux.getTipoIP().equals("A")){
-            setAtaque(aux);
-            System.out.println("Equipado arma");             
+             setAtaque(aux);
+             System.out.println(aux.getNomeDoItem());
+             System.out.println("Equipado arma");
+             
         }
-        
         if(aux.getTipoIP().equals("D")){
             setDefesa(aux);
+            System.out.println(aux.getAtributo());
             System.out.println("Equipado Escudo");
         }
+        
     }
     
     public int getPesoAtual() {
-        return pesoAtual;
+        return PesoAtual;
+    }
+    
+    public void usarItem(String nome){
+    
+        Item i;
+        i = Inventario.get(nome);
+        
+        if(i.getTipoIP().equals("C")){
+            Alimentar(i.getNomeDoItem());
+            Imprimir();
+        }
+        if(i.getTipoIP().equals("E")){
+            if(EnerMax == 0){ 
+                EnerMax = getEnergia() + i.getAtributo();
+                setEnergia(EnerMax);
+            }else EnerMax += i.getAtributo();
+            
+            System.out.println("Energia Max aumentada! Agora é " + getEnergia() );
+        }
+        
+        if(i.getTipoIP().equals("P")){
+            if(LimitedePeso == 0)
+            LimitedePeso += i.getAtributo();
+            System.out.println("Limite de Peso aumentado! Agora é " + LimitedePeso);
+        }   
+        
     }
     
     public void adionarMoedas(int qtd){
+            
         int p = 1;
         
         moedas += qtd;
         
-        if(inventario.get("Moedas") == null){
-            Item m = new Item("Moedas", p, moedas, "M");
-            inserirItem(m);
-        }
-        else{
-            p = moedas/1000;
+        Item m;
+        m = Inventario.get("MOEDAS");
+        
+        if(m == null){
             
-            Item auxM = null;
-            
-            auxM = inventario.get("Moedas");
-            
-            auxM.setPesoDoItem(p);
-            auxM.setAtributo(moedas);
+            Item mds = new Item("MOEDAS", 1, moedas, "M");
+            Inventario.put("MOEDAS", mds);
         }
         
-        if((moedas%1000) != 0){
-            Item auxM = null;
+        if((moedas/1000) > 0){
+            Item auxM;
            
             p =+ 1 ;
             
-            auxM = inventario.get("Moedas");
+            auxM = Inventario.get("MOEDAS");
+            
+            auxM.setPesoDoItem(p);
+            Inventario.remove("MOEDAS");
+            
+            auxM.setAtributo(moedas);
+            
+            Inventario.put("MOEDAS", auxM);
+        }
+        if((moedas%1000) != 0 &&((moedas/1000) > 1)){
+        
+            Item auxM;
+           
+            p =+ 1 ;
+            
+            auxM = Inventario.get("MOEDAS");
           
             auxM.setPesoDoItem(p);
+            
+            Inventario.remove("MOEDAS");
+            
+            auxM.setAtributo(moedas);
+            
+            Inventario.put("MOEDAS", auxM);
+            System.out.println(auxM.getAtributo());
+         
+        }else{
+            Item auxM;
+            
+            auxM = Inventario.get("MOEDAS");
+          
+            auxM.setPesoDoItem(p);
+            
+            auxM.setAtributo(moedas);
+            
+            Inventario.put("MOEDAS", auxM);
+            System.out.println(auxM.getAtributo());
+        
         }
     }
-    
+    	public void imprimir() {
+		System.out.println("#####################");
+		System.out.println("# Dados do Heroi");
+		super.Imprimir();
+	}
+
+        
 }
 

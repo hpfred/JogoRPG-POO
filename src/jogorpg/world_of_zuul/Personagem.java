@@ -6,7 +6,7 @@
  * ...
  * 
  * @author  Frederico Peixoto Antunes e José Pauletti
- * @version 2019.07.07
+ * @version 2019.06.30
  */
 
 package jogorpg.world_of_zuul;
@@ -15,25 +15,37 @@ import java.util.Random;
 
 public abstract class Personagem {
     
-    private String nome;
-    private int energia;
+    private String Nome;
+    private int Energia;
     private Random random = new Random();
     private Item ataque;
     private Item defesa;
+    private char tipo;
     
-    public Personagem(String nome, int energia) {
-        this.nome = nome;
-        this.energia = energia;
+    public Personagem(String Nome, int Energia, char tipo) {
+        this.Nome = Nome;
+        this.Energia = Energia;
+        this.tipo = tipo;
     }
 
+    public char getTipo() {
+        return tipo;
+    }
+
+    
     public String getNome() {
-        return nome;
+        return Nome;
     }
 
     public int getEnergia() {
-        return energia;
+        return Energia;
     }
 
+    public void setEnergia(int Energia) {
+       this.Energia = Energia;
+    }
+
+    
     public void setAtaque(Item ataque) {
         this.ataque = ataque;
     }
@@ -51,30 +63,30 @@ public abstract class Personagem {
     }
    
     
-    public int incremento(int qtd){             // Modifiquei para receber qunatidade de icremento de vida
-        energia += qtd;
-        if(energia > 10)
-            energia = 10;
+    public int Incremento(int qtd){             // Modifiquei para receber qunatidade de icremento de vida
+        Energia += qtd;
+        if(Energia > 10)
+            Energia = 10;
 
-        return energia;
+        return Energia;
     }
     
-    public int decremento(int ataque){
-        if(energia > 0)
-            energia--;
-
-        if(energia == 0)
-            System.out.println("Morto");
-
-        return energia;
+    public int Decremento(int ataque){
+        if(Energia > 0)
+            Energia -= ataque;
+        
+        if(Energia < 0)
+            Energia = 0;
+        
+        return Energia;
     }
 
-    public int sorte(){
+    public int Sorte(){
         return random.nextInt(6);
     }
     
-    public void imprimir(){
-        System.out.println("#####################\n" + "#Nome: " + nome + "\n" + "#Energia: " + energia + "\n" + "#####################" );
+    public void Imprimir(){
+        System.out.println("#####################\n" + "#Nome: " + Nome + "\n" + "#Energia: " + Energia + "\n" + "#####################" );
     }
     
 }
